@@ -1,10 +1,7 @@
 const bcrypt = require('bcryptjs');
-
 const { User } = require('../../models/user');
 const { ConflictError, ValidationError } = require('../../errors');
-
 const { SALT_LENGTH = 10 } = process.env;
-
 async function createUser(req, res, next) {
   try {
     const { email, password, name } = req.body;
@@ -19,7 +16,7 @@ async function createUser(req, res, next) {
     res.status(201).send(user);
   } catch (err) {
     if (err.name === 'CastError' || err.name === 'ValidationError') {
-      next(new ValidationError(`Неверные данные в ${err.path ?? 'запросе'}`));
+      next(new ValidationError('Неверные данные в запросе'));
       return;
     }
     if (err.code === 11000) {
@@ -29,5 +26,4 @@ async function createUser(req, res, next) {
     next(err);
   }
 }
-module.exports = { createUser };
 module.exports = { createUser };
