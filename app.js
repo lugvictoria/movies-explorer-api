@@ -4,11 +4,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
-
 // modules
 const { routes } = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { limiter } = require('./middlewares/limiter');
+
 // params
 const {
   PORT = 3000,
@@ -27,10 +28,10 @@ mongoose
   });
 
 // middlewares
+app.use(limiter);
 app.use(requestLogger);
 app.use(helmet());
 app.use(routes);
-
 // error handlers
 app.use(errorLogger);
 app.use(errors());
