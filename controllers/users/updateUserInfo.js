@@ -1,5 +1,9 @@
 const { User } = require('../../models/user');
-const { NotFoundError, ValidationError, ConflictError } = require('../../errors');
+const {
+  NotFoundError,
+  ValidationError,
+  ConflictError,
+} = require('../../errors');
 
 async function updateUserInfo(req, res, next) {
   try {
@@ -13,7 +17,6 @@ async function updateUserInfo(req, res, next) {
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
     }
-
     res.send(user);
   } catch (err) {
     if (err.name === 'CastError' || err.name === 'ValidationError') {
@@ -24,7 +27,6 @@ async function updateUserInfo(req, res, next) {
       next(new ConflictError('Пользователь с таким email уже существует'));
       return;
     }
-
     next(err);
   }
 }

@@ -5,7 +5,8 @@ const { SALT_LENGTH = 10 } = process.env;
 async function createUser(req, res, next) {
   try {
     const { email, password, name } = req.body;
-    const passwordHash = await bcrypt.hash(password, SALT_LENGTH);
+    const passwordHash = await bcrypt.hash(password, +SALT_LENGTH);
+
     let user = await User.create({
       email,
       password: passwordHash,
