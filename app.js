@@ -6,13 +6,13 @@ const { errors } = require('celebrate');
 // modules
 const { routes } = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // params
 const {
   PORT = 3000,
-  DATABASE_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb',
+  DATABASE_URL = 'mongodb://127.0.0.1:27017/moviesdb',
 } = process.env;
-
 // initializing
 const app = express();
 mongoose
@@ -24,11 +24,16 @@ mongoose
     console.log('Error on database connection');
     console.error(err);
   });
+
 // middlewares
+app.use(requestLogger);
 app.use(routes);
+
 // error handlers
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
+
 // app starting
 app.listen(PORT, () => {
   console.log(`App started on port ${PORT}...`);
