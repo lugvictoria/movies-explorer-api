@@ -1,9 +1,8 @@
+const mongoose = require('mongoose');
+
 const { User } = require('../../models/user');
-const {
-  NotFoundError,
-  ValidationError,
-  ConflictError,
-} = require('../../errors');
+const { NotFoundError, ConflictError } = require('../../errors');
+const { handleMongooseError } = require('../../utils/handleMongooseError');
 
 async function updateUserInfo(req, res, next) {
   try {
@@ -17,16 +16,19 @@ async function updateUserInfo(req, res, next) {
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
     }
+
     res.send(user);
   } catch (err) {
-    if (err.name === 'CastError' || err.name === 'ValidationError') {
-      next(new ValidationError('Неверные данные в запросе'));
-      return;
-    }
-    if (err.code === 11000) {
+    if (err.name === 'MongoServerError' && err.code === 11000) {
       next(new ConflictError('Пользователь с таким email уже существует'));
       return;
     }
+
+    if (err instanceof mongoose.Error) {
+      next(handleMongooseError(err));
+      return;
+    }
+
     next(err);
   }
 }
