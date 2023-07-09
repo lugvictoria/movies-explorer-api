@@ -1,5 +1,6 @@
-const { getMovies } = require('./getMovies');
-const { saveMovie } = require('./saveMovie');
-const { deleteMovie } = require('./deleteMovie');
+const { getUserInfo } = require('./getUserInfo');
+const { updateUserInfo } = require('./updateUserInfo');
+const { createUser } = require('./createUser');
+const { login } = require('./login');
 
-module.exports = { getMovies, saveMovie, deleteMovie };
+module.exports = { getUserInfo, updateUserInfo, createUser, login };
