@@ -1,5 +1,5 @@
 const { Movie } = require('../../models/movie');
-const { ValidationError } = require('../../errors');
+const { ValidationError, ConflictError } = require('../../errors');
 
 async function saveMovie(req, res, next) {
   try {
@@ -16,9 +16,7 @@ async function saveMovie(req, res, next) {
       nameEN,
       movieId,
     } = req.body;
-
     const ownerId = req.user._id;
-
     const movie = await Movie.create({
       country,
       director,
@@ -33,7 +31,6 @@ async function saveMovie(req, res, next) {
       movieId,
       owner: ownerId,
     });
-
     await movie.populate('owner');
     res.status(201).send(movie);
   } catch (err) {
@@ -41,9 +38,12 @@ async function saveMovie(req, res, next) {
       next(new ValidationError('Неверные данные в запросе'));
       return;
     }
+    if (err.code === 11000) {
+      next(new ConflictError('Фильм с таким id уже существует'));
+      return;
+    }
 
     next(err);
   }
 }
-
 module.exports = { saveMovie };
