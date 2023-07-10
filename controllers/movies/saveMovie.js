@@ -3,6 +3,7 @@ const { mongoose } = require('mongoose');
 const { Movie } = require('../../models/movie');
 const { ConflictError } = require('../../errors');
 const { handleMongooseError } = require('../../utils/handleMongooseError');
+const { ERROR_MESSAGES } = require('../../utils/constants');
 
 async function saveMovie(req, res, next) {
   try {
@@ -19,7 +20,9 @@ async function saveMovie(req, res, next) {
       nameEN,
       movieId,
     } = req.body;
+
     const ownerId = req.user._id;
+
     const movie = await Movie.create({
       country,
       director,
@@ -34,11 +37,12 @@ async function saveMovie(req, res, next) {
       movieId,
       owner: ownerId,
     });
+
     await movie.populate('owner');
     res.status(201).send(movie);
   } catch (err) {
-    if (err.name === 'MongoServerError' && err.code === 11000) {
-      next(new ConflictError('Фильм с таким id уже существует'));
+    if (err.code === 11000) {
+      next(new ConflictError(ERROR_MESSAGES.MOVIE_CONFLICT));
       return;
     }
 
@@ -50,4 +54,6 @@ async function saveMovie(req, res, next) {
     next(err);
   }
 }
+
 module.exports = { saveMovie };
+

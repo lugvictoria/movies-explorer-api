@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+
 const { validateObjectId } = require('../validateObjectId');
 
 const deleteMovieValidator = celebrate({
