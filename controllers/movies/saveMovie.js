@@ -56,4 +56,3 @@ async function saveMovie(req, res, next) {
 }
 
 module.exports = { saveMovie };
-
