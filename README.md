@@ -23,6 +23,8 @@
 1. Movies Explorer (бэкенд-часть) ⬅ *этот репозиторий*
 2. [Movies Explorer (фронтенд-часть)](                                )
 
+Ссылка на сайт: http://api.movies-lugvictoria.nomoredomains.work/
+
 ## API
 ### Регистрация пользователя
 `POST /signup` - создаёт пользователя с переданными в теле email, password и name
