@@ -15,7 +15,7 @@ const { errorHandler } = require('./middlewares/errorHandler');
 // config
 const {
   PORT = 3000,
-  DATABASE_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb',
+  DATABASE_URL = 'mongodb://127.0.0.1:27017/moviesdb',
 } = process.env;
 // initializing
 const app = express();
